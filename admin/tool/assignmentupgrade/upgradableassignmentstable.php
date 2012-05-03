@@ -52,7 +52,7 @@ class tool_assignmentupgrade_assignments_table extends table_sql implements rend
      * @param int $rowoffset The starting row for pagination
      */
     function __construct($perpage, $rowoffset=0) {
-        global $CFG, $PAGE;
+        global $PAGE;
         parent::__construct('tool_assignmentupgrade_assignments');
         $this->perpage = $perpage;
         $this->output = $PAGE->get_renderer('tool_assignmentupgrade');
