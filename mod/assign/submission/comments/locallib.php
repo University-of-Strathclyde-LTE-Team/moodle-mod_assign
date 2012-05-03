@@ -111,7 +111,7 @@ class assign_submission_comments extends assign_submission_plugin {
      * @param string $log - can be appended to by the upgrade
      * @return bool was it a success? (false will trigger a rollback)
      */
-    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, $log) {
+    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, & $log) {
         // first upgrade settings (nothing to do)
         return true;
     }
@@ -126,7 +126,7 @@ class assign_submission_comments extends assign_submission_plugin {
      * @param string $log Record upgrade messages in the log
      * @return bool true or false - false will trigger a rollback
      */
-    public function upgrade(context $oldcontext, stdClass $oldassignment, stdClass $oldsubmission, stdClass $submission, $log) {
+    public function upgrade(context $oldcontext, stdClass $oldassignment, stdClass $oldsubmission, stdClass $submission, & $log) {
 
         if ($oldsubmission->data1 != '') {
 

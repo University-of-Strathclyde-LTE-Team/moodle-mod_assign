@@ -131,6 +131,62 @@ class assign_feedback_comments extends assign_feedback_plugin {
         }
         return '';
     }
+  
+    /**
+     * Return true if this plugin can upgrade an old Moodle 2.2 assignment of this type
+     * and version.
+     *
+     * @param string $type old assignment subtype
+     * @param int $version old assignment version
+     * @return bool True if upgrade is possible
+     */
+    public function can_upgrade($type, $version) {
+
+        if (($type == 'upload' || $type == 'uploadsingle') && $version >= 2011112900) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Upgrade the settings from the old assignment to the new plugin based one
+     *
+     * @param context $oldcontext - the context for the old assignment
+     * @param stdClass $oldassignment - the data for the old assignment
+     * @param string $log - can be appended to by the upgrade
+     * @return bool was it a success? (false will trigger a rollback)
+     */
+    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, & $log) {
+        // first upgrade settings (nothing to do)
+        return true;
+    }
+
+    /**
+     * Upgrade the feedback from the old assignment to the new one
+     *
+     * @param context $oldcontext - the database for the old assignment context
+     * @param stdClass $oldassignment The data record for the old assignment
+     * @param stdClass $oldsubmission The data record for the old submission
+     * @param stdClass $grade The data record for the new grade
+     * @param string $log Record upgrade messages in the log
+     * @return bool true or false - false will trigger a rollback
+     */
+    public function upgrade(context $oldcontext, stdClass $oldassignment, stdClass $oldsubmission, stdClass $grade, & $log) {
+        global $DB;
+
+        $feedbackcomments = new stdClass();
+        $feedbackcomments->commenttext = $oldsubmission->submissioncomment;
+        $feedbackcomments->commentformat = FORMAT_HTML;
+
+        $feedbackcomments->grade = $grade->id;
+        $feedbackcomments->assignment = $this->assignment->get_instance()->id;
+        if (!$DB->insert_record('assignfeedback_comments', $feedbackcomments) > 0) {
+            $log .= get_string('couldnotconvertgrade', 'mod_assign', $grade->userid);
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * If this plugin adds to the gradebook comments field, it must specify the format of the text

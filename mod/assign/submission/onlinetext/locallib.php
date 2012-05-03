@@ -286,7 +286,7 @@ class assign_submission_onlinetext extends assign_submission_plugin {
      * @param string $log record log events here
      * @return bool Was it a success?
      */
-    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, $log) {
+    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, & $log) {
         // first upgrade settings (nothing to do)
         return true;
     }
@@ -301,7 +301,7 @@ class assign_submission_onlinetext extends assign_submission_plugin {
      * @param string $log Record upgrade messages in the log
      * @return bool true or false - false will trigger a rollback
      */
-    public function upgrade(context $oldcontext, stdClass $oldassignment, stdClass $oldsubmission, stdClass $submission, $log) {
+    public function upgrade(context $oldcontext, stdClass $oldassignment, stdClass $oldsubmission, stdClass $submission, & $log) {
         global $DB;
 
         $onlinetextsubmission = new stdClass();
