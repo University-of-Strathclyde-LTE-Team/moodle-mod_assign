@@ -2485,9 +2485,10 @@ class assign {
                 $mform->setType('grade', PARAM_TEXT);
             } else {
                 $grademenu = make_grades_menu($this->get_instance()->grade);
-
-                $mform->addElement('select', 'grade', get_string('grade').':', $grademenu);
-                $mform->setType('grade', PARAM_INT);
+                if (count($grademenu) > 0) {
+                    $mform->addElement('select', 'grade', get_string('grade').':', $grademenu);
+                    $mform->setType('grade', PARAM_INT);
+                }
             }
         }
         $mform->addElement('static', 'progress', '', get_string('gradingstudentprogress', 'assign', array('index'=>$rownum+1, 'count'=>count($useridlist))));
@@ -2742,7 +2743,10 @@ class assign {
             if ($gradinginstance) {
                 $grade->grade = $gradinginstance->submit_and_get_grade($formdata->advancedgrading, $grade->id);
             } else {
-                $grade->grade= grade_floatval($formdata->grade);
+                // handle the case when grade is set to No Grade
+                if (isset($formdata->grade)) {
+                    $grade->grade= grade_floatval($formdata->grade);
+                }
             }
             $grade->grader= $USER->id;
 

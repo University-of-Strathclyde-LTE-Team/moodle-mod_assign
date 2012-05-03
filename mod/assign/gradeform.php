@@ -82,7 +82,7 @@ class mod_assign_grade_form extends moodleform {
             }
         } else {
             // this is a scale
-            if ($scale = $DB->get_record('scale', array('id'=>-($this->get_instance()->grade)))) {
+            if ($scale = $DB->get_record('scale', array('id'=>-($this->assignment->get_instance()->grade)))) {
                 $scaleoptions = make_menu_from_list($scale->scale);
                 if (!array_key_exists((int)$data['grade'], $scaleoptions)) {
                     $errors['grade'] = get_string('invalidgradeforscale', 'assign');
