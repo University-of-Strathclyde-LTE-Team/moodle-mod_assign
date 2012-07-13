@@ -413,6 +413,7 @@ class assign {
         $update->duedate = $formdata->duedate;
         $update->allowsubmissionsfromdate = $formdata->allowsubmissionsfromdate;
         $update->grade = $formdata->grade;
+        $update->completionsubmit = $formdata->completionsubmit;
         $returnid = $DB->insert_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$returnid), '*', MUST_EXIST);
         // cache the course record
@@ -631,6 +632,7 @@ class assign {
         $update->duedate = $formdata->duedate;
         $update->allowsubmissionsfromdate = $formdata->allowsubmissionsfromdate;
         $update->grade = $formdata->grade;
+        $update->completionsubmit = $formdata->completionsubmit;
 
         $result = $DB->update_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$update->id), '*', MUST_EXIST);
@@ -1507,6 +1509,11 @@ class assign {
                 $submission->status = ASSIGN_SUBMISSION_STATUS_DRAFT;
             } else {
                 $submission->status = ASSIGN_SUBMISSION_STATUS_SUBMITTED;
+
+                $completion = new completion_info($this->get_course());
+                if ($completion->is_enabled($this->get_course_module()) && $this->get_instance()->completionsubmit) {
+                    $completion->update_state($this->get_course_module(), COMPLETION_COMPLETE, $userid);
+                }
             }
             $sid = $DB->insert_record('assign_submission', $submission);
             $submission->id = $sid;
@@ -2489,6 +2496,12 @@ class assign {
 
             $submission->status = ASSIGN_SUBMISSION_STATUS_SUBMITTED;
             $this->update_submission($submission);
+
+            $completion = new completion_info($this->get_course());
+            if ($completion->is_enabled($this->get_course_module()) && $this->get_instance()->completionsubmit) {
+                $completion->update_state($this->get_course_module(), COMPLETION_COMPLETE, $userid);
+            }
+
             $this->add_to_log('submit for grading', $this->format_submission_for_log($submission));
             $this->notify_graders($submission);
             $this->notify_student_submission_receipt($submission);
@@ -3063,6 +3076,10 @@ class assign {
 
         $user = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
 
+        $completion = new completion_info($this->get_course());
+        if ($completion->is_enabled($this->get_course_module()) && $this->get_instance()->completionsubmit) {
+            $completion->update_state($this->get_course_module(), COMPLETION_INCOMPLETE, $userid);
+        }
         $this->add_to_log('revert submission to draft', get_string('reverttodraftforstudent', 'assign', array('id'=>$user->id, 'fullname'=>fullname($user))));
 
     }
