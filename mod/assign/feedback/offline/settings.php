@@ -15,18 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * This file defines the admin settings for this plugin
  *
- * @package    mod_assign
+ * @package   assignfeedback_offline
  * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$module->component = 'mod_assign'; // Full name of the plugin (used for diagnostics)
-$module->version  = 2012071800;    // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2012061700;    // Requires this Moodle version
-$module->cron     = 60;
-
+$settings->add(new admin_setting_configcheckbox('assignfeedback_offline/default',
+                   new lang_string('default', 'assignfeedback_offline'),
+                   new lang_string('default_help', 'assignfeedback_offline'), 0));
 

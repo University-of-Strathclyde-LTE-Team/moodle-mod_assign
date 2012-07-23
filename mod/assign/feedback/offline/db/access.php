@@ -15,18 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Capability definitions for this module.
  *
- * @package    mod_assign
+ * @package   assignfeedback_offline
  * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
-$module->component = 'mod_assign'; // Full name of the plugin (used for diagnostics)
-$module->version  = 2012071800;    // The current module version (Date: YYYYMMDDXX)
-$module->requires = 2012061700;    // Requires this Moodle version
-$module->cron     = 60;
+$capabilities = array();
 
 
